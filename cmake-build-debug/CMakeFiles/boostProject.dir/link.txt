@@ -1,1 +1,0 @@
-/usr/bin/g++ -g CMakeFiles/boostProject.dir/main.cpp.o CMakeFiles/boostProject.dir/fiber_impl.cpp.o CMakeFiles/boostProject.dir/fiber_manager.cpp.o CMakeFiles/boostProject.dir/condvar.cpp.o CMakeFiles/boostProject.dir/mutex.cpp.o CMakeFiles/boostProject.dir/waiter.cpp.o -o boostProject  -lboost_fiber -lboost_context 
