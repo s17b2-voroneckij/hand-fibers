@@ -5,6 +5,8 @@
 
 using std::shared_ptr;
 
+void startFiberManager();
+
 class FiberManager {
     friend class Fiber;
     friend class FiberImpl;
@@ -14,4 +16,6 @@ class FiberManager {
     void registerFiber(const shared_ptr<FiberImpl>& fiber_ptr);
 
     list<shared_ptr<FiberImpl>> ready_fibers;
+
+    friend void startFiberManager();
 };

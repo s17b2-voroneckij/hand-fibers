@@ -11,7 +11,7 @@ FiberImpl::FiberImpl(const std::function<void()> &func) {
 
 void FiberImpl::join() {
     while (!finished) {
-        fiberManager.work();
+        finish_cv.wait();
     }
 }
 
@@ -32,6 +32,7 @@ void FiberImpl::continue_executing() {
             previous_context = std::move(sink);
             func();
             finished = true;
+            finish_cv.notify_all();
             return std::move(previous_context);
         });
     } else {
@@ -45,6 +46,10 @@ void FiberImpl::suspend() {
 
 void sched_execution() {
     current_fiber->suspend();
+}
+
+void startFiberManager() {
+    fiberManager.work();
 }
 
 bool FiberImpl::isReady() const {

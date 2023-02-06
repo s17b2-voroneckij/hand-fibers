@@ -1,8 +1,11 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
-#include "fiber_impl.h"
+using std::shared_ptr;
+
+class FiberImpl;
 
 class CondVar {
 public:

@@ -5,6 +5,7 @@
 #include <memory>
 #include <list>
 #include <boost/context/continuation.hpp>
+#include "condvar.h"
 
 using namespace boost::context;
 using std::cerr;
@@ -34,6 +35,7 @@ private:
     std::function<void()> func;
     continuation this_context;
     continuation previous_context;
+    CondVar finish_cv;
     bool launched = false;
     bool finished = false;
     bool is_ready = false;
