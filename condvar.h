@@ -2,7 +2,10 @@
 
 #include <vector>
 #include <memory>
+#include <boost/lockfree/queue.hpp>
+#include <boost/shared_ptr.hpp>
 
+using boost::lockfree::queue;
 using std::shared_ptr;
 
 class FiberImpl;

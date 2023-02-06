@@ -26,5 +26,5 @@ private:
 
     CondVar cv;
     unordered_map<int, FdRequest*> map;
-    bool stopped = false;
+    volatile bool stopped = false;
 };

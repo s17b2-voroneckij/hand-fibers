@@ -14,11 +14,12 @@ using std::list;
 
 class FiberManager;
 
-class CondVar;
-
 void sched_execution();
 
 class FiberImpl: public std::enable_shared_from_this<FiberImpl> {
+public:
+    ~FiberImpl();
+
 private:
     FiberImpl(const std::function<void()>& func);
     void join();

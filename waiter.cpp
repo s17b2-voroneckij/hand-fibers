@@ -27,8 +27,11 @@ void Waiter::stop() {
 
 void Waiter::loop() {
     while (!waiter.stopped) {
-        while (waiter.map.empty()) {
+        while (!waiter.stopped && waiter.map.empty()) {
             waiter.cv.wait();
+        }
+        if (waiter.stopped) {
+            break;
         }
         std::vector<pollfd> request;
         request.reserve(waiter.map.size());
@@ -47,5 +50,9 @@ void Waiter::loop() {
             }
         }
         sched_execution();
+    }
+    cerr << "waiter stopped, going to notify all" << std::endl;
+    for (auto& elem : waiter.map) {
+        elem.second->cv.notify_all();
     }
 }

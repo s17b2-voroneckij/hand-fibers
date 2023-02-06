@@ -24,11 +24,11 @@ public:
     }
 
     bool isFinished() {
-        fiber_ptr->isFinished();
+        return fiber_ptr->isFinished();
     }
 
     bool isReady() {
-        fiber_ptr->isReady();
+        return fiber_ptr->isReady();
     }
 
 private:

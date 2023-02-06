@@ -6,6 +6,7 @@ extern FiberManager fiberManager;
 extern thread_local std::shared_ptr<FiberImpl> current_fiber;
 
 FiberImpl::FiberImpl(const std::function<void()> &func) {
+    cerr << "new fiber being created" << std::endl;
     this->func = func;
 }
 
@@ -54,4 +55,8 @@ void startFiberManager() {
 
 bool FiberImpl::isReady() const {
     return is_ready;
+}
+
+FiberImpl::~FiberImpl() {
+    cerr << "fiber being deleted" << std::endl;
 }

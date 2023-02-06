@@ -1,5 +1,3 @@
-#pragma once
-
 #include "condvar.h"
 #include "fiber_impl.h"
 #include "fiber_manager.h"
