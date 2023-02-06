@@ -3,7 +3,7 @@
 #include "fiber_manager.h"
 
 extern FiberManager fiberManager;
-extern thread_local std::shared_ptr<FiberImpl> current_fiber;
+extern thread_local FiberImpl* current_fiber;
 
 void CondVar::wait() {
     waiters.push_back(current_fiber);

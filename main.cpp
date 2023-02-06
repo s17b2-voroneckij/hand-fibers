@@ -127,7 +127,7 @@ int main() {
         }
         sockaddr_in sin{};
         sin.sin_family = AF_INET;
-        sin.sin_port = htons(8001);
+        sin.sin_port = htons(8000);
         sin.sin_addr = in_addr{0};
         if (bind(socket_fd, reinterpret_cast<const sockaddr *>(&sin), sizeof(sin)) < 0) {
             printf("bind error: %s\n", strerror(errno));
@@ -144,11 +144,11 @@ int main() {
                 break;
             }
             int client_fd = accept4(socket_fd, NULL, NULL, SOCK_NONBLOCK);
-            Fiber thread(worker, client_fd);
+            Fiber(worker, client_fd);
         }
-        cerr << "main fiber leaving" << endl;
     });
     startFiberManager();
+    global_fiber.join();
     /*
     Fiber fiber(print_number, 8);
     fiber.join();

@@ -23,7 +23,6 @@ public:
     static void loop();
 
 private:
-
     CondVar cv;
     unordered_map<int, FdRequest*> map;
     volatile bool stopped = false;

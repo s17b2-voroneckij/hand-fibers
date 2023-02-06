@@ -1,21 +1,27 @@
 #pragma once
 
 #include <memory>
+#include <boost/lockfree/queue.hpp>
 #include "fiber_impl.h"
-
-using std::shared_ptr;
 
 void startFiberManager();
 
 class FiberManager {
+public:
+    FiberManager();
+
+private:
     friend class Fiber;
     friend class FiberImpl;
     friend class CondVar;
     friend void sched_execution();
     void work();
-    void registerFiber(const shared_ptr<FiberImpl>& fiber_ptr);
+    void registerFiber(FiberImpl* fiber_ptr);
 
-    list<shared_ptr<FiberImpl>> ready_fibers;
+    std::list<FiberImpl*> ready_fibers;
+    boost::lockfree::queue<FiberImpl*> all_fibers;
+    CondVar deletion_cv;
 
     friend void startFiberManager();
+    friend void deletionFunction();
 };

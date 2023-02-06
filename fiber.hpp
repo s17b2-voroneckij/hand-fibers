@@ -9,10 +9,15 @@ class Fiber {
 public:
     template<typename Callable, typename... Args>
     Fiber(const Callable& function, const Args&... args) {
-        fiber_ptr = shared_ptr<FiberImpl>(new FiberImpl([&] () {
+        fiber_ptr = new FiberImpl([&] () {
             function(args...);
-        }));
+        });
         fiber_ptr->start();
+    }
+
+    ~Fiber() {
+        fiber_ptr->deleting_allowed = true;
+        fiberManager.deletion_cv.notify_one();
     }
 
     void join() {
@@ -32,5 +37,5 @@ public:
     }
 
 private:
-    shared_ptr<FiberImpl> fiber_ptr;
+    FiberImpl* fiber_ptr;
 };

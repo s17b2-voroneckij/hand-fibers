@@ -1,9 +1,11 @@
 #include "fiber_impl.h"
 #include "fiber_manager.h"
 
+using std::cerr;
+
 extern FiberManager fiberManager;
 
-extern thread_local std::shared_ptr<FiberImpl> current_fiber;
+extern thread_local FiberImpl* current_fiber;
 
 FiberImpl::FiberImpl(const std::function<void()> &func) {
     cerr << "new fiber being created" << std::endl;
@@ -21,7 +23,7 @@ bool FiberImpl::isFinished() {
 }
 
 void FiberImpl::start() {
-    fiberManager.registerFiber(this->shared_from_this());
+    fiberManager.registerFiber(this);
     is_ready = true;
 }
 
@@ -29,11 +31,11 @@ void FiberImpl::continue_executing() {
     if (!launched) {
         launched = true;
         this_context = callcc([&](auto sink) {
-            cerr << "starting func in new fiber\n";
             previous_context = std::move(sink);
             func();
             finished = true;
             finish_cv.notify_all();
+            fiberManager.deletion_cv.notify_one();
             return std::move(previous_context);
         });
     } else {

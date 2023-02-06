@@ -51,7 +51,6 @@ void Waiter::loop() {
         }
         sched_execution();
     }
-    cerr << "waiter stopped, going to notify all" << std::endl;
     for (auto& elem : waiter.map) {
         elem.second->cv.notify_all();
     }

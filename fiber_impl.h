@@ -8,15 +8,12 @@
 #include "condvar.h"
 
 using namespace boost::context;
-using std::cerr;
-using std::shared_ptr;
-using std::list;
 
 class FiberManager;
 
 void sched_execution();
 
-class FiberImpl: public std::enable_shared_from_this<FiberImpl> {
+class FiberImpl {
 public:
     ~FiberImpl();
 
@@ -29,6 +26,7 @@ private:
     friend class Fiber;
     friend class FiberManager;
     friend class CondVar;
+    friend void deletionFunction();
     friend void sched_execution();
     void continue_executing();
     void suspend();
@@ -40,4 +38,5 @@ private:
     bool launched = false;
     bool finished = false;
     bool is_ready = false;
+    bool deleting_allowed = false;
 };
