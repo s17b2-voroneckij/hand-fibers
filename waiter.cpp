@@ -16,7 +16,7 @@ int Waiter::wait(int fd, short events) {
 }
 
 Waiter::Waiter() {
-    std::cout << "waiter initialising" << std::endl;
+    std::cerr << "waiter initialising" << std::endl;
 }
 
 Fiber fiber(Waiter::loop);
@@ -31,6 +31,7 @@ void Waiter::loop() {
             waiter.cv.wait();
         }
         if (waiter.stopped) {
+            std::cerr << "Waiter fiber leaving with break\n";
             break;
         }
         std::vector<pollfd> request;
@@ -51,7 +52,10 @@ void Waiter::loop() {
         }
         sched_execution();
     }
+    std::cerr << "waiter main loop leaving\n";
     for (auto& elem : waiter.map) {
-        elem.second->cv.notify_all();
+        std::cerr << "waiter main loop notifying someone before leaving\n";
+        //elem.second->cv.notify_all();
     }
+    std::cerr << "waiter finally leaving\n";
 }

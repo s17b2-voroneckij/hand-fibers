@@ -7,6 +7,9 @@
 void startFiberManager();
 
 class FiberManager {
+public:
+    FiberManager();
+
 private:
     friend class Fiber;
     friend class FiberImpl;
@@ -15,7 +18,7 @@ private:
     void work();
     void registerFiber(FiberImpl* fiber_ptr);
 
-    std::list<FiberImpl*> ready_fibers;
+    boost::lockfree::queue<FiberImpl*> ready_fibers;
 
     friend void startFiberManager();
 };

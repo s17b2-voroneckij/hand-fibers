@@ -9,7 +9,7 @@ class Fiber {
 public:
     template<typename Callable, typename... Args>
     Fiber(const Callable& function, const Args&... args) {
-        fiber_ptr = new FiberImpl([&] () {
+        fiber_ptr = new FiberImpl([args..., function] () {
             function(args...);
         });
         fiber_ptr->start();
@@ -18,6 +18,7 @@ public:
     ~Fiber() {
         fiber_ptr->deleting_allowed = true;
         if (fiber_ptr->isFinished()) {
+            std::cerr << "~Fiber() deleting fiber" << std::endl;
             delete fiber_ptr;
         }
     }

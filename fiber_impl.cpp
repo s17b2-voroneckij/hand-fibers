@@ -23,8 +23,8 @@ bool FiberImpl::isFinished() {
 }
 
 void FiberImpl::start() {
-    fiberManager.registerFiber(this);
     is_ready = true;
+    fiberManager.registerFiber(this);
 }
 
 void FiberImpl::continue_executing() {

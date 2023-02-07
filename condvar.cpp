@@ -19,6 +19,7 @@ void CondVar::notify_one() {
     FiberImpl* fiber = nullptr;
     if (waiters.pop(fiber)) {
         fiber->is_ready = true;
+        fiberManager.registerFiber(fiber);
     }
 }
 
@@ -26,6 +27,7 @@ void CondVar::notify_all() {
     FiberImpl* fiber = nullptr;
     while (waiters.pop(fiber)) {
         fiber->is_ready = true;
+        fiberManager.registerFiber(fiber);
     }
 }
 

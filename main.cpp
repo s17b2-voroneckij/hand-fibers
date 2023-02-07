@@ -110,10 +110,11 @@ void signal_handler(int) {
 }
 
 int main() {
+    std::cerr << "pid: " << getpid() << std::endl;
     signal(SIGTERM, signal_handler);
     signal(SIGINT, signal_handler);
     signal(SIGABRT, signal_handler);
-    std::cout << "main enetered" << endl;
+    std::cerr << "main enetered" << endl;
     Fiber global_fiber([]() {
         int socket_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         if (socket_fd < 0) {
@@ -138,21 +139,27 @@ int main() {
             exit(0);
         }
         while (!Finisher::finish) {
-            printf("accepting\n");
+            std::cerr << "accepting\n";
             Waiter::wait(socket_fd, POLLIN);
+            std::cerr << "main fiber waited on Waiter\n";
             if (Finisher::finish) {
+                std::cerr << "main thread leaving after waiting\n";
                 break;
             }
             int client_fd = accept4(socket_fd, NULL, NULL, SOCK_NONBLOCK);
             Fiber(worker, client_fd);
         }
+        std::cerr << "main thread leaving\n";
     });
     startFiberManager();
-    global_fiber.join();
-    /*
+/*
     Fiber fiber(print_number, 8);
-    fiber.join();
+    {
+        Fiber fiber2(print_number, 10);
+    }
+    startFiberManager();
 
+    /*
     int number_of_threads = 10;
     vector<Fiber> threads;
     threads.reserve(number_of_threads);
