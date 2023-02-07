@@ -38,7 +38,7 @@ FiberManager::FiberManager(): all_fibers(10) {
 void deletionFunction() {
     while (!Finisher::finish) {
         queue<FiberImpl*> temp(10);
-        FiberImpl *this_fiber;
+        FiberImpl *this_fiber = nullptr;
         int iter = 0;
         while (fiberManager.all_fibers.pop(this_fiber)) {
             if (this_fiber->deleting_allowed && this_fiber->finished) {

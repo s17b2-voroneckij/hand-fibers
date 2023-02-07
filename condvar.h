@@ -9,10 +9,11 @@ class FiberImpl;
 
 class CondVar {
 public:
+    CondVar();
     void wait();
     void notify_one();
     void notify_all();
 
 private:
-    std::vector<FiberImpl*> waiters;
+    queue<FiberImpl*> waiters;
 };
