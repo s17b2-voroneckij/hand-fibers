@@ -17,7 +17,9 @@ public:
 
     ~Fiber() {
         fiber_ptr->deleting_allowed = true;
-        fiberManager.deletion_cv.notify_one();
+        if (fiber_ptr->isFinished()) {
+            delete fiber_ptr;
+        }
     }
 
     void join() {

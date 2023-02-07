@@ -35,7 +35,6 @@ void FiberImpl::continue_executing() {
             func();
             finished = true;
             finish_cv.notify_all();
-            fiberManager.deletion_cv.notify_one();
             return std::move(previous_context);
         });
     } else {
