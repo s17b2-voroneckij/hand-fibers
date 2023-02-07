@@ -1,3 +1,4 @@
 #include "finisher.hpp"
+#include <atomic>
 
-volatile bool Finisher::finish = false;
+volatile std::atomic<bool> Finisher::finish = false;

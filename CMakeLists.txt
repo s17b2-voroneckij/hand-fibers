@@ -3,7 +3,7 @@ project(hand-fibers)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread")
 
 find_package( Boost REQUIRED COMPONENTS ALL )
 include_directories( ${Boost_INCLUDE_DIRS} )

@@ -44,3 +44,10 @@ void FiberManager::registerFiber(FiberImpl* fiber_ptr) {
 
 FiberManager::FiberManager() : ready_fibers(10) {
 }
+
+void start_fiber_manager_thread() {
+    std::thread thread([] {
+        fiberManager.work();
+    });
+    thread.detach();
+}

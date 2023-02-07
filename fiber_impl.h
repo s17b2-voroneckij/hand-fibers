@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <atomic>
 #include <iostream>
 #include <memory>
 #include <list>
@@ -26,7 +27,6 @@ private:
     friend class Fiber;
     friend class FiberManager;
     friend class CondVar;
-    friend void deletionFunction();
     friend void sched_execution();
     void continue_executing();
     void suspend();
@@ -35,8 +35,8 @@ private:
     continuation this_context;
     continuation previous_context;
     CondVar finish_cv;
-    bool launched = false;
-    bool finished = false;
-    bool is_ready = false;
-    bool deleting_allowed = false;
+    std::atomic<bool> launched = false;
+    std::atomic<bool> finished = false;
+    std::atomic<bool> is_ready = false;
+    std::atomic<bool> deleting_allowed = false;
 };

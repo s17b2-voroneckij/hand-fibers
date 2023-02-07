@@ -1,4 +1,6 @@
+#include <atomic>
+
 class Finisher {
 public:
-    static volatile bool finish;
+    static volatile std::atomic<bool> finish;
 };

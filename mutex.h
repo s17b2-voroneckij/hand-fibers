@@ -1,4 +1,7 @@
+#pragma once
+
 #include "condvar.h"
+#include <atomic>
 
 class Mutex {
 public:
@@ -8,5 +11,5 @@ public:
 private:
 
     CondVar cv;
-    bool locked = false;
+    std::atomic<bool> locked = false;
 };

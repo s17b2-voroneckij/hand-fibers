@@ -1,8 +1,10 @@
 #include <unordered_map>
+#include <atomic>
 
 #include "fiber_impl.h"
 #include "fiber_manager.h"
 #include "condvar.h"
+#include "mutex.h"
 
 using std::unordered_map;
 
@@ -24,6 +26,7 @@ public:
 
 private:
     CondVar cv;
+    Mutex map_mutex;
     unordered_map<int, FdRequest*> map;
-    volatile bool stopped = false;
+    volatile std::atomic<bool> stopped = false;
 };

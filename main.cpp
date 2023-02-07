@@ -69,6 +69,24 @@ void print_number(int a) {
     cerr << a << endl;
 }
 
+unsigned long fibonacci(long n) {
+    if (n <= 2) {
+        return 1;
+    }
+    //if ((long) rand() * rand() % 10000000 == 0) {
+    //    sched_execution();
+    //}
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+template<typename Callable, typename... Args>
+auto run_with_timing(Callable function, Args ...args) {
+    auto start_time = clock();
+    auto result = function(args...);
+    std::cout << "completed in " << ((double) clock() - start_time) / CLOCKS_PER_SEC << std::endl;
+    return result;
+}
+
 void worker(int fd) {
     printf("work called with fd: %d\n", fd);
     char buf[1024];
@@ -77,7 +95,7 @@ void worker(int fd) {
         if (Finisher::finish) {
             return;
         }
-        int n = read(fd, buf, sizeof(buf));
+        ssize_t n = read(fd, buf, sizeof(buf));
         if (n == 0) {
             printf("client finished, leaving\n");
             return;
@@ -86,13 +104,18 @@ void worker(int fd) {
             printf("in worker error: %s\n", strerror(errno));
             return;
         }
+        long request = strtol(buf, nullptr, 10);
+        auto response = run_with_timing(fibonacci, request);
+        auto response_string = "response: " + std::to_string(response) + "\n";
+        strcpy(buf, response_string.c_str());
+        n = strlen(buf);
         int wrote = 0;
         while (!Finisher::finish && wrote < n) {
             Waiter::wait(fd, POLLOUT);
             if (Finisher::finish) {
                 return;
             }
-            int m = write(fd, buf + wrote, n - wrote);
+            ssize_t m = write(fd, buf + wrote, n - wrote);
             if (m < 0) {
                 printf("in worker error: %s\n", strerror(errno));
                 return;
@@ -128,7 +151,7 @@ int main() {
         }
         sockaddr_in sin{};
         sin.sin_family = AF_INET;
-        sin.sin_port = htons(8000);
+        sin.sin_port = htons(8001);
         sin.sin_addr = in_addr{0};
         if (bind(socket_fd, reinterpret_cast<const sockaddr *>(&sin), sizeof(sin)) < 0) {
             printf("bind error: %s\n", strerror(errno));
@@ -151,6 +174,7 @@ int main() {
         }
         std::cerr << "main thread leaving\n";
     });
+    start_fiber_manager_thread();
     startFiberManager();
 /*
     Fiber fiber(print_number, 8);
