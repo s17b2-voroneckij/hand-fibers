@@ -39,4 +39,6 @@ private:
     std::atomic<bool> finished = false;
     std::atomic<bool> is_ready = false;
     std::atomic<bool> deleting_allowed = false;
+    std::atomic<bool> in_queue = false;
+    std::atomic<bool> executing = false;
 };

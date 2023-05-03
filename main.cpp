@@ -20,6 +20,8 @@ using std::cerr;
 using std::endl;
 using std::vector;
 
+const int PORT = 8001;
+
 void test_func() {
     static int global_id = 0;
     int this_id = global_id++;
@@ -73,9 +75,9 @@ unsigned long fibonacci(long n) {
     if (n <= 2) {
         return 1;
     }
-    //if ((long) rand() * rand() % 10000000 == 0) {
-    //    sched_execution();
-    //}
+    if ((unsigned long) rand() * rand() % 10000000ll == 0) {
+        sched_execution();
+    }
     return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
@@ -132,12 +134,12 @@ void signal_handler(int) {
     Waiter::stop();
 }
 
-int main() {
+void server() {
     std::cerr << "pid: " << getpid() << std::endl;
     signal(SIGTERM, signal_handler);
     signal(SIGINT, signal_handler);
     signal(SIGABRT, signal_handler);
-    std::cerr << "main enetered" << endl;
+    std::cerr << "main entered" << endl;
     Fiber global_fiber([]() {
         int socket_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         if (socket_fd < 0) {
@@ -151,7 +153,7 @@ int main() {
         }
         sockaddr_in sin{};
         sin.sin_family = AF_INET;
-        sin.sin_port = htons(8001);
+        sin.sin_port = htons(PORT);
         sin.sin_addr = in_addr{0};
         if (bind(socket_fd, reinterpret_cast<const sockaddr *>(&sin), sizeof(sin)) < 0) {
             printf("bind error: %s\n", strerror(errno));
@@ -174,8 +176,15 @@ int main() {
         }
         std::cerr << "main thread leaving\n";
     });
-    start_fiber_manager_thread();
+    for (int i = 0; i < 3; i++) {
+        //start_fiber_manager_thread();
+    }
     startFiberManager();
+}
+
+int main() {
+    //startFiberManager();
+    server();
 /*
     Fiber fiber(print_number, 8);
     {

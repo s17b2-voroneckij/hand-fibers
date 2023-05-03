@@ -1,7 +1,7 @@
 #include "mutex.h"
 
 void Mutex::lock() {
-    while (locked) {
+    while (locked.exchange(true)) {
         cv.wait();
     }
     locked = true;
