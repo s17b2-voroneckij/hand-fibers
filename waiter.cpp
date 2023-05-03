@@ -19,7 +19,7 @@ Waiter::Waiter() {
     std::cout << "waiter initialising" << std::endl;
 }
 
-Fiber fiber(Waiter::loop);
+[[maybe_unused]] Fiber fiber(Waiter::loop);
 
 void Waiter::stop() {
     waiter.stopped = true;

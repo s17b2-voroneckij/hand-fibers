@@ -2,7 +2,7 @@
 
 FiberManager fiberManager;
 
-thread_local std::shared_ptr<FiberImpl> current_fiber;
+std::shared_ptr<FiberImpl> current_fiber;
 
 void FiberManager::work() {
     while (!ready_fibers.empty()) {

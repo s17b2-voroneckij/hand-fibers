@@ -20,9 +20,9 @@ void sched_execution();
 
 class FiberImpl: public std::enable_shared_from_this<FiberImpl> {
 private:
-    FiberImpl(const std::function<void()>& func);
+    explicit FiberImpl(const std::function<void()>& func);
     void join();
-    bool isFinished();
+    bool isFinished() const;
     void start();
     bool isReady() const;
     friend class Fiber;

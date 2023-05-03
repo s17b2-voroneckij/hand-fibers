@@ -3,7 +3,7 @@
 
 extern FiberManager fiberManager;
 
-extern thread_local std::shared_ptr<FiberImpl> current_fiber;
+extern std::shared_ptr<FiberImpl> current_fiber;
 
 FiberImpl::FiberImpl(const std::function<void()> &func) {
     this->func = func;
@@ -15,7 +15,7 @@ void FiberImpl::join() {
     }
 }
 
-bool FiberImpl::isFinished() {
+bool FiberImpl::isFinished() const {
     return finished;
 }
 

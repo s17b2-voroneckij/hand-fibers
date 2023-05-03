@@ -8,7 +8,7 @@ extern FiberManager fiberManager;
 class Fiber {
 public:
     template<typename Callable, typename... Args>
-    Fiber(const Callable& function, const Args&... args) {
+    explicit Fiber(const Callable& function, const Args&... args) {
         fiber_ptr = shared_ptr<FiberImpl>(new FiberImpl([&] () {
             function(args...);
         }));
@@ -24,11 +24,11 @@ public:
     }
 
     bool isFinished() {
-        fiber_ptr->isFinished();
+        return fiber_ptr->isFinished();
     }
 
     bool isReady() {
-        fiber_ptr->isReady();
+        return fiber_ptr->isReady();
     }
 
 private:
