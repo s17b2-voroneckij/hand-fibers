@@ -1,5 +1,5 @@
 #include "waiter.hpp"
-#include "fiber.hpp"
+#include "../fiber/fiber.hpp"
 
 #include <vector>
 #include <poll.h>

@@ -6,12 +6,12 @@
 #include <netinet/in.h>
 #include <fcntl.h>
 
-#include "condvar.h"
-#include "mutex.h"
-#include "fiber.hpp"
-#include "waiter.hpp"
-#include "fiber_manager.h"
-#include "context.h"
+#include "sync/condvar.h"
+#include "sync/mutex.h"
+#include "fiber/fiber.hpp"
+#include "waiter/waiter.hpp"
+#include "fiber/fiber_manager.h"
+#include "context/context.h"
 
 using std::cerr;
 using std::endl;

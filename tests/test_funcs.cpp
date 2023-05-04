@@ -1,11 +1,11 @@
 #include <iostream>
 #include <vector>
 
-#include "fiber_impl.h"
-#include "condvar.h"
-#include "mutex.h"
-#include "fiber.hpp"
-#include "waiter.hpp"
+#include "../fiber/fiber_impl.h"
+#include "../sync/condvar.h"
+#include "../sync/mutex.h"
+#include "../fiber/fiber.hpp"
+#include "../waiter/waiter.hpp"
 
 using std::cerr;
 using std::endl;

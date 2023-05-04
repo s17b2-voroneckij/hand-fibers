@@ -4,8 +4,8 @@
 #include <iostream>
 #include <memory>
 #include <list>
-#include "condvar.h"
-#include "context.h"
+#include "../sync/condvar.h"
+#include "../context/context.h"
 
 using std::cerr;
 using std::shared_ptr;

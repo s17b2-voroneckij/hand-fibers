@@ -1,6 +1,6 @@
 #include "condvar.h"
-#include "fiber_impl.h"
-#include "fiber_manager.h"
+#include "../fiber/fiber_impl.h"
+#include "../fiber/fiber_manager.h"
 
 extern FiberManager fiberManager;
 extern std::shared_ptr<FiberImpl> current_fiber;

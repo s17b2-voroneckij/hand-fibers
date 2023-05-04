@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "context.h"
+#include "../context/context.h"
 
 Context main_context;
 Context other;

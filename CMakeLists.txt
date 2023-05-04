@@ -9,4 +9,4 @@ link_libraries(boost_fiber boost_context)
 enable_language(C ASM)
 
 
-add_executable(boostProject condvar.cpp context.cpp context.S fiber_impl.cpp fiber_manager.cpp mutex.cpp waiter.cpp main.cpp)
+add_executable(boostProject sync/condvar.cpp context/context.cpp context/context.S fiber/fiber_impl.cpp fiber/fiber_manager.cpp sync/mutex.cpp waiter/waiter.cpp main.cpp)

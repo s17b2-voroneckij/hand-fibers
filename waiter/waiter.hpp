@@ -1,8 +1,8 @@
 #include <unordered_map>
 
-#include "fiber_impl.h"
-#include "fiber_manager.h"
-#include "condvar.h"
+#include "../fiber/fiber_impl.h"
+#include "../fiber/fiber_manager.h"
+#include "../sync/condvar.h"
 
 using std::unordered_map;
 
