@@ -11,6 +11,7 @@
 #include "fiber.hpp"
 #include "waiter.hpp"
 #include "fiber_manager.h"
+#include "context.h"
 
 using std::cerr;
 using std::endl;
@@ -43,6 +44,8 @@ void worker(int fd) {
     }
 }
 
+const int PORT = 8021;
+
 int main() {
     Fiber main_fiber([] () {
         std::cout << "main enetered" << endl;
@@ -59,7 +62,7 @@ int main() {
             }
             sockaddr_in sin{};
             sin.sin_family = AF_INET;
-            sin.sin_port = htons(8001);
+            sin.sin_port = htons(PORT);
             sin.sin_addr = in_addr{0};
             if (bind(socket_fd, reinterpret_cast<const sockaddr *>(&sin), sizeof(sin)) < 0) {
                 printf("bind error: %s\n", strerror(errno));
@@ -69,6 +72,7 @@ int main() {
                 printf("listen error: %s\n", strerror(errno));
                 exit(0);
             }
+            printf("listening on port %d\n", PORT);
             while (true) {
                 printf("accepting\n");
                 Waiter::wait(socket_fd, POLLIN);

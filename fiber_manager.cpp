@@ -23,4 +23,5 @@ void FiberManager::work() {
 
 void FiberManager::registerFiber(const shared_ptr<FiberImpl>& fiber_ptr) {
     ready_fibers.push_back(fiber_ptr);
+    fiber_ptr->previous_context = &manager_context;
 }

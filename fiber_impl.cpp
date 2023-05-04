@@ -24,9 +24,24 @@ void FiberImpl::start() {
     is_ready = true;
 }
 
+namespace {
+std::function<void(void)> bootstrap_func;
+}
+
+void fiber_starter() {
+    bootstrap_func();
+    current_fiber->finished = true;
+    switch_context(&current_fiber->this_context, current_fiber->previous_context);
+    current_fiber->finish_cv.notify_all();
+}
+
 void FiberImpl::continue_executing() {
     if (!launched) {
         launched = true;
+        this_context = Context::create_context();
+        bootstrap_func = func;
+        this_context.setRip(reinterpret_cast<unsigned long>(&fiber_starter));
+        /*
         this_context = callcc([&](auto sink) {
             cerr << "starting func in new fiber\n";
             previous_context = std::move(sink);
@@ -35,13 +50,15 @@ void FiberImpl::continue_executing() {
             finish_cv.notify_all();
             return std::move(previous_context);
         });
-    } else {
-        this_context = this_context.resume();
+         */
     }
+    switch_context(previous_context, &this_context);
+    //this_context = this_context.resume();
 }
 
 void FiberImpl::suspend() {
-    previous_context = previous_context.resume();
+    switch_context(&this_context, previous_context);
+    //previous_context = previous_context.resume();
 }
 
 void sched_execution() {

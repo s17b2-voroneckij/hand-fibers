@@ -4,10 +4,9 @@
 #include <iostream>
 #include <memory>
 #include <list>
-#include <boost/context/continuation.hpp>
 #include "condvar.h"
+#include "context.h"
 
-using namespace boost::context;
 using std::cerr;
 using std::shared_ptr;
 using std::list;
@@ -29,12 +28,13 @@ private:
     friend class FiberManager;
     friend class CondVar;
     friend void sched_execution();
+    friend void fiber_starter();
     void continue_executing();
     void suspend();
 
     std::function<void()> func;
-    continuation this_context;
-    continuation previous_context;
+    Context this_context;
+    Context* previous_context;
     CondVar finish_cv;
     bool launched = false;
     bool finished = false;
