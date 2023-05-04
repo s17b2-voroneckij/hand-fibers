@@ -31,6 +31,7 @@ private:
     friend void fiber_starter();
     void continue_executing();
     void suspend();
+    static void fiber_starter(FiberImpl*);
 
     std::function<void()> func;
     Context this_context;

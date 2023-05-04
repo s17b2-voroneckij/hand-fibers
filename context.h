@@ -36,5 +36,5 @@ extern "C" {
 /*
  * saves current context into old_context_dest and loads new_context
  */
-extern void switch_context(Context* old_context_dest, Context* new_context);
+extern void switch_context(Context* old_context_dest, Context* new_context, unsigned long first_arg = 0);
 }

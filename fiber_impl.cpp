@@ -24,41 +24,25 @@ void FiberImpl::start() {
     is_ready = true;
 }
 
-namespace {
-std::function<void(void)> bootstrap_func;
-}
-
-void fiber_starter() {
-    bootstrap_func();
-    current_fiber->finished = true;
-    switch_context(&current_fiber->this_context, current_fiber->previous_context);
-    current_fiber->finish_cv.notify_all();
+void FiberImpl::fiber_starter(FiberImpl* this_) {
+    this_->func();
+    this_->finished = true;
+    switch_context(&this_->this_context, this_->previous_context);
+    this_->finish_cv.notify_all();
 }
 
 void FiberImpl::continue_executing() {
     if (!launched) {
         launched = true;
         this_context = Context::create_context();
-        bootstrap_func = func;
-        this_context.setRip(reinterpret_cast<unsigned long>(&fiber_starter));
-        /*
-        this_context = callcc([&](auto sink) {
-            cerr << "starting func in new fiber\n";
-            previous_context = std::move(sink);
-            func();
-            finished = true;
-            finish_cv.notify_all();
-            return std::move(previous_context);
-        });
-         */
+        this_context.setRip((unsigned long)(&FiberImpl::fiber_starter));
     }
-    switch_context(previous_context, &this_context);
-    //this_context = this_context.resume();
+    // the third argument is passed for the case when fiber_starter is called; it is passed as this_
+    switch_context(previous_context, &this_context, reinterpret_cast<unsigned long>(this));
 }
 
 void FiberImpl::suspend() {
     switch_context(&this_context, previous_context);
-    //previous_context = previous_context.resume();
 }
 
 void sched_execution() {
