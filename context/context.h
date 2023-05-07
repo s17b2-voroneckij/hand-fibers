@@ -7,6 +7,10 @@ public:
     static const ssize_t STACK_SIZE = 4096 * 2;
 
     Context() = default;
+    Context(const Context&) = delete;
+    Context& operator = (const Context&) = delete;
+    Context(Context&& other);
+    Context& operator = (Context&& other) noexcept;
     static Context create_context();
     ~Context();
 
@@ -21,6 +25,14 @@ private:
     unsigned long r14;
     unsigned long r15;
     unsigned long rip;
+    unsigned long fs;
+
+    bool init_fs = false;
+public:
+    void setFs(unsigned long fs);
+
+public:
+    unsigned long getFs() const;
 };
 
 extern "C" {

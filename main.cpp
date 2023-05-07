@@ -5,6 +5,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <fcntl.h>
+#include <fstream>
+#include <unistd.h>
 
 #include "sync/condvar.h"
 #include "sync/mutex.h"
@@ -14,15 +16,20 @@
 #include "context/context.h"
 
 using std::cerr;
+using std::cout;
 using std::endl;
 using std::vector;
 
+thread_local char buf[1024];
+
+thread_local ssize_t n;
+
+
 void worker(int fd) {
     printf("work called with fd: %d\n", fd);
-    char buf[1024];
     while (true) {
         Waiter::wait(fd, POLLIN);
-        ssize_t n = read(fd, buf, sizeof(buf));
+        n = read(fd, buf, sizeof(buf));
         if (n == 0) {
             printf("client finished, leaving\n");
             return;
