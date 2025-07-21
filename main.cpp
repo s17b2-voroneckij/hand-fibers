@@ -72,7 +72,9 @@ int main() {
             while (true) {
                 printf("accepting\n");
                 Waiter::wait(socket_fd, POLLIN);
-                int client_fd = accept4(socket_fd, nullptr, nullptr, SOCK_NONBLOCK);
+                int client_fd = accept(socket_fd, nullptr, nullptr);
+                int flags = fcntl(client_fd, F_GETFL, 0);
+                fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
                 Fiber thread(worker, client_fd);
             }
         });
